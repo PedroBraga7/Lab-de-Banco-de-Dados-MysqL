@@ -1,0 +1,8 @@
+π matr, nomeE, endereço, sexo, salário, supervisor, depto (σ nomeD = "Vendas" (Empregado ⨝ Departamento))
+π nomeE, salário (σ salário > 5000 (Empregado))
+π nome, localização, deptoControla (Projetos)
+π nomeDep, dataNasc (Dependentes ⨝ σ nomeD = "Financeiro" (Empregado ⨝ Departamento))
+π nomeE (Empregado - π supervisor (Empregado))
+π nome, localização, deptoControla (σ localização = "São Paulo" (Projetos))
+π nomeE, salário, supervisor (σ nomeD = "Produção" ∧ salário > 4000 (Empregado ⨝ Departamento))
+π nomeD, Localização (Departamento ⨝ Alocação ⨝ Projetos)
