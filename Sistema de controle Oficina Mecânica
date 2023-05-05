@@ -1,0 +1,90 @@
+CREATE TABLE clientes (
+    cpf VARCHAR(11) PRIMARY KEY,
+    nome VARCHAR(50),
+    endereco VARCHAR(100),
+    sexo VARCHAR(1),
+    telefone VARCHAR(20)
+);
+
+CREATE TABLE veiculos (
+    id_veiculo INT PRIMARY KEY AUTO_INCREMENT,
+    placa VARCHAR(8),
+    renavam VARCHAR(11),
+    marca VARCHAR(50),
+    modelo VARCHAR(50),
+    ano INT,
+    cor VARCHAR(20),
+    quilometragem INT,
+    cpf_cliente VARCHAR(11),
+    FOREIGN KEY (cpf_cliente) REFERENCES clientes(cpf)
+);
+
+CREATE TABLE servicos (
+    id_servico INT PRIMARY KEY AUTO_INCREMENT,
+    tipo VARCHAR(50),
+    descricao VARCHAR(100),
+    custo DECIMAL(10, 2),
+    tempo_estimado INT
+);
+
+CREATE TABLE pecas (
+    id_peca INT PRIMARY KEY AUTO_INCREMENT,
+    tipo VARCHAR(50),
+    descricao VARCHAR(100),
+    marca VARCHAR(50),
+    preco DECIMAL(10, 2)
+);
+
+CREATE TABLE mecanicos (
+    cpf VARCHAR(11) PRIMARY KEY,
+    nome VARCHAR(50),
+    data_nascimento DATE,
+    data_contratacao DATE,
+    salario DECIMAL(10, 2)
+);
+
+CREATE TABLE ordens_de_servico (
+    id_os INT PRIMARY KEY AUTO_INCREMENT,
+    data DATE,
+    hora_inicio TIME,
+    hora_termino TIME,
+    descricao_problema VARCHAR(100),
+    tipo_pagamento VARCHAR(20),
+    valor_final DECIMAL(10, 2),
+    id_veiculo INT,
+    cpf_mecanico VARCHAR(11),
+    FOREIGN KEY (id_veiculo) REFERENCES veiculos(id_veiculo),
+    FOREIGN KEY (cpf_mecanico) REFERENCES mecanicos(cpf)
+);
+
+CREATE TABLE servicos_prestados (
+    id_os INT,
+    id_servico INT,
+    PRIMARY KEY (id_os, id_servico),
+    FOREIGN KEY (id_os) REFERENCES ordens_de_servico(id_os),
+    FOREIGN KEY (id_servico) REFERENCES servicos(id_servico)
+);
+
+CREATE TABLE pecas_utilizadas (
+    id_os INT,
+    id_peca INT,
+    quantidade INT,
+    PRIMARY KEY (id_os, id_peca),
+    FOREIGN KEY (id_os) REFERENCES ordens_de_servico(id_os),
+    FOREIGN KEY (id_peca) REFERENCES pecas(id_peca)
+);
+INSERT INTO clientes (cpf, nome, endereco, sexo, telefone) 
+VALUES ('12345678901', 'Maria Silva', 'Rua das Flores, 123', 'F', '(11) 9999-9999');
+INSERT INTO veiculos (placa, renavam, marca, modelo, ano, cor, quilometragem, cpf_cliente)
+VALUES ('ABC1234', '12345678901', 'Fiat', 'Palio', 2010, 'Branco', 100000, '12345678901');
+-- Selecionar todos os clientes
+SELECT * FROM clientes;
+
+-- Selecionar o nome e telefone dos clientes do sexo masculino
+SELECT nome, telefone FROM clientes WHERE sexo = 'M';
+
+-- Selecionar a descrição de todos os serviços
+SELECT descricao FROM servicos;
+
+-- Selecionar o nome e salário dos mecânicos ordenados pelo salário em ordem decrescente
+SELECT nome, salario FROM mecanicos ORDER BY salario DESC;
