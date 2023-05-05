@@ -1,0 +1,69 @@
+/* Código em MySql-Criação de uma oficina e suas tabelas./*
+CREATE TABLE Paciente (
+    cpf VARCHAR(14) PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    endereco VARCHAR(100),
+    sexo CHAR(1),
+    telefone VARCHAR(14)
+);
+
+CREATE TABLE Consulta (
+    id_consulta INTEGER PRIMARY KEY,
+    data DATE NOT NULL,
+    hora_inicio TIME NOT NULL,
+    hora_fim TIME NOT NULL,
+    descricao_problema VARCHAR(100),
+    tipo_pagamento VARCHAR(20),
+    valor_final DECIMAL(8,2),
+    km_veiculo DECIMAL(8,2),
+    cpf_paciente VARCHAR(14) NOT NULL,
+    FOREIGN KEY (cpf_paciente) REFERENCES Paciente (cpf)
+);
+
+CREATE TABLE Veiculo (
+    placa VARCHAR(7) PRIMARY KEY,
+    renavam VARCHAR(11) NOT NULL,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    ano INTEGER NOT NULL,
+    cor VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Servico (
+    id_servico INTEGER PRIMARY KEY,
+    tipo VARCHAR(50) NOT NULL,
+    descricao VARCHAR(100),
+    custo DECIMAL(8,2) NOT NULL,
+    tempo_estimado TIME NOT NULL
+);
+
+CREATE TABLE Peca (
+    id_peca INTEGER PRIMARY KEY,
+    tipo VARCHAR(50) NOT NULL,
+    descricao VARCHAR(100),
+    marca VARCHAR(50) NOT NULL,
+    preco DECIMAL(8,2) NOT NULL,
+    quantidade INTEGER NOT NULL
+);
+
+CREATE TABLE Atendimento (
+    id_atendimento INTEGER PRIMARY KEY,
+    placa_veiculo VARCHAR(7) NOT NULL,
+    id_servico INTEGER NOT NULL,
+    id_peca INTEGER NOT NULL,
+    id_consulta INTEGER NOT NULL,
+    cpf_mecanico VARCHAR(14) NOT NULL,
+    FOREIGN KEY (placa_veiculo) REFERENCES Veiculo (placa),
+    FOREIGN KEY (id_servico) REFERENCES Servico (id_servico),
+    FOREIGN KEY (id_peca) REFERENCES Peca (id_peca),
+    FOREIGN KEY (id_consulta) REFERENCES Consulta (id_consulta),
+    FOREIGN KEY (cpf_mecanico) REFERENCES Mecanico (cpf)
+);
+
+CREATE TABLE Mecanico (
+    cpf VARCHAR(14) PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    data_contratacao DATE NOT NULL,
+    salario DECIMAL(8,2) NOT NULL
+);
